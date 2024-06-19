@@ -79,7 +79,7 @@ text = "x:0, y:0
 [node name="info" type="Label" parent="labels/labels_left"]
 layout_mode = 2
 text = "v0.9a (pre-alpha)
- License: GPLv4 (open-source)
+ License: GPLv3 (open-source)
 "
 
 [node name="labels_right" type="VBoxContainer" parent="labels"]
