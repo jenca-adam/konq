@@ -1,0 +1,66 @@
+[gd_scene load_steps=6 format=3 uid="uid://qls51x3kf73"]
+
+[ext_resource type="Script" path="res://build_dialog_entry.gd" id="1_3l1e5"]
+[ext_resource type="Theme" uid="uid://bjmm4w5yt2ght" path="res://subv_theme.tres" id="1_s1qml"]
+[ext_resource type="Texture2D" uid="uid://bvifhtdr3wb7r" path="res://coastal.png" id="2_dbk8m"]
+[ext_resource type="Texture2D" uid="uid://c7gqanr4ltbjc" path="res://build.png" id="4_u75c2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_164oi"]
+bg_color = Color(0.393086, 0.393086, 0.393085, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="entry" type="MarginContainer"]
+offset_right = 900.0
+offset_bottom = 78.0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+script = ExtResource("1_3l1e5")
+
+[node name="panel" type="PanelContainer" parent="."]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_164oi")
+
+[node name="margin_inner" type="MarginContainer" parent="panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="horizontal_spacing" type="HBoxContainer" parent="panel/margin_inner"]
+layout_mode = 2
+
+[node name="name" type="VBoxContainer" parent="panel/margin_inner/horizontal_spacing"]
+layout_mode = 2
+theme = ExtResource("1_s1qml")
+
+[node name="title" type="HBoxContainer" parent="panel/margin_inner/horizontal_spacing/name"]
+layout_mode = 2
+
+[node name="title_text" type="Label" parent="panel/margin_inner/horizontal_spacing/name/title"]
+layout_mode = 2
+theme = ExtResource("1_s1qml")
+text = "Port
+"
+
+[node name="img" type="TextureRect" parent="panel/margin_inner/horizontal_spacing/name/title"]
+layout_mode = 2
+texture = ExtResource("2_dbk8m")
+stretch_mode = 5
+
+[node name="description" type="Label" parent="panel/margin_inner/horizontal_spacing/name"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.728822, 0.728822, 0.728822, 1)
+theme_override_font_sizes/font_size = 15
+text = "Allows ships to sail"
+
+[node name="buildit" type="Button" parent="panel/margin_inner/horizontal_spacing"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 20
+text = "Build"
+icon = ExtResource("4_u75c2")

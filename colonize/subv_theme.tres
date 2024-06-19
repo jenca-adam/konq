@@ -1,0 +1,5 @@
+[gd_resource type="Theme" format=3 uid="uid://bjmm4w5yt2ght"]
+
+[resource]
+default_font_size = 30
+BoxContainer/colors/ContBg = Color(0.351563, 0.351563, 0.351563, 1)

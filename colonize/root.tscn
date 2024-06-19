@@ -1,0 +1,183 @@
+[gd_scene load_steps=11 format=3 uid="uid://boei2k7sjeamr"]
+
+[ext_resource type="Script" path="res://root.gd" id="1_q334g"]
+[ext_resource type="Texture2D" uid="uid://bvfgc6ua7v52w" path="res://water.png" id="2_jbic1"]
+[ext_resource type="Script" path="res://map.gd" id="3_in0ut"]
+[ext_resource type="TileSet" uid="uid://bun6iegpmxpr1" path="res://tilemap.tres" id="3_t2r5s"]
+[ext_resource type="Texture2D" uid="uid://c7gqanr4ltbjc" path="res://build.png" id="5_nsrlx"]
+[ext_resource type="Texture2D" uid="uid://bdo0oqc2wehvu" path="res://no.png" id="6_1502a"]
+[ext_resource type="Texture2D" uid="uid://chj2jdtnjukip" path="res://info.png" id="6_jyehc"]
+[ext_resource type="Texture2D" uid="uid://c48j40cueh1ht" path="res://demolish.png" id="7_7r7xq"]
+[ext_resource type="Script" path="res://build_dialog_viewport.gd" id="35_0jeg8"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_oqmv7"]
+viewport_path = NodePath("map_viewport")
+
+[node name="root" type="Node2D"]
+script = ExtResource("1_q334g")
+mapSize = 300
+minIslandIterations = 10
+maxIslandIterations = 20
+minNIslands = 90
+maxNIslands = 120
+
+[node name="map_viewport" type="SubViewport" parent="."]
+size = Vector2i(864, 864)
+
+[node name="cam" type="Camera2D" parent="map_viewport"]
+
+[node name="w" type="TextureRect" parent="map_viewport/cam"]
+offset_left = -500000.0
+offset_top = -500000.0
+offset_right = 500000.0
+offset_bottom = 500000.0
+texture = ExtResource("2_jbic1")
+expand_mode = 1
+
+[node name="map" type="TileMap" parent="map_viewport/cam"]
+tile_set = ExtResource("3_t2r5s")
+format = 2
+layer_0/name = "tiles"
+layer_1/name = "terrain"
+layer_1/z_index = 1
+layer_1/tile_data = PackedInt32Array()
+layer_2/name = "buildings"
+layer_2/z_index = 2
+layer_2/tile_data = PackedInt32Array()
+layer_3/name = "highlights"
+layer_3/z_index = 3
+layer_3/tile_data = PackedInt32Array()
+layer_4/name = "overlays"
+layer_4/z_index = 4
+layer_4/tile_data = PackedInt32Array()
+script = ExtResource("3_in0ut")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = 368.0
+offset_top = 18.0
+offset_right = 1232.0
+offset_bottom = 882.0
+texture = SubResource("ViewportTexture_oqmv7")
+
+[node name="labels" type="HBoxContainer" parent="."]
+offset_right = 1600.0
+offset_bottom = 50.0
+
+[node name="labels_left" type="VBoxContainer" parent="labels"]
+layout_mode = 2
+
+[node name="konq" type="Label" parent="labels/labels_left"]
+layout_mode = 2
+text = "Konq!
+"
+
+[node name="pos" type="Label" parent="labels/labels_left"]
+layout_mode = 2
+text = "x:0, y:0
+"
+
+[node name="info" type="Label" parent="labels/labels_left"]
+layout_mode = 2
+text = "v0.9a (pre-alpha)
+ License: GPLv4 (open-source)
+"
+
+[node name="labels_right" type="VBoxContainer" parent="labels"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 8
+
+[node name="tile_type_label" type="Label" parent="labels/labels_right"]
+layout_mode = 2
+text = "
+"
+
+[node name="island_name_label" type="Label" parent="labels/labels_right"]
+layout_mode = 2
+text = "
+
+"
+
+[node name="zoom_label" type="Label" parent="labels/labels_right"]
+layout_mode = 2
+text = "Zoom: 1.0"
+
+[node name="start_button" type="Button" parent="labels/labels_right"]
+visible = false
+layout_mode = 2
+disabled = true
+text = "Pick island
+"
+
+[node name="action_buttons" type="VBoxContainer" parent="labels/labels_right"]
+visible = false
+layout_mode = 2
+
+[node name="action_buttons_row_1" type="HBoxContainer" parent="labels/labels_right/action_buttons"]
+layout_mode = 2
+
+[node name="build_button" type="Button" parent="labels/labels_right/action_buttons/action_buttons_row_1"]
+layout_mode = 2
+text = "Build
+"
+icon = ExtResource("5_nsrlx")
+
+[node name="demolish_button" type="Button" parent="labels/labels_right/action_buttons/action_buttons_row_1"]
+layout_mode = 2
+text = "Demolish"
+icon = ExtResource("7_7r7xq")
+
+[node name="action_buttons_row_2" type="HBoxContainer" parent="labels/labels_right/action_buttons"]
+layout_mode = 2
+
+[node name="special_button" type="Button" parent="labels/labels_right/action_buttons/action_buttons_row_2"]
+layout_mode = 2
+text = "Special
+"
+icon = ExtResource("6_1502a")
+
+[node name="info_button" type="Button" parent="labels/labels_right/action_buttons/action_buttons_row_2"]
+layout_mode = 2
+text = "Info
+"
+icon = ExtResource("6_jyehc")
+
+[node name="build_dialog_container" type="SubViewportContainer" parent="."]
+visible = false
+offset_left = 350.0
+offset_right = 1250.0
+offset_bottom = 900.0
+
+[node name="build_dialog_viewport" type="SubViewport" parent="build_dialog_container"]
+handle_input_locally = false
+size = Vector2i(900, 900)
+render_target_update_mode = 0
+script = ExtResource("35_0jeg8")
+
+[node name="bg" type="ColorRect" parent="build_dialog_container/build_dialog_viewport"]
+offset_right = 900.0
+offset_bottom = 900.0
+color = Color(0.226707, 0.226707, 0.226707, 0.843137)
+
+[node name="scroll" type="ScrollContainer" parent="build_dialog_container/build_dialog_viewport"]
+offset_right = 900.0
+offset_bottom = 900.0
+
+[node name="entries" type="VBoxContainer" parent="build_dialog_container/build_dialog_viewport/scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="title" type="Label" parent="build_dialog_container/build_dialog_viewport/scroll/entries"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 55
+text = "Build
+"
+
+[connection signal="build_building" from="." to="." method="_on_build_building"]
+[connection signal="dialog_closed" from="." to="." method="_on_dialog_closed"]
+[connection signal="pressed" from="labels/labels_right/start_button" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="labels/labels_right/action_buttons/action_buttons_row_1/build_button" to="." method="_on_build_button_pressed"]
+[connection signal="pressed" from="labels/labels_right/action_buttons/action_buttons_row_1/demolish_button" to="." method="_on_demolish_button_pressed"]
