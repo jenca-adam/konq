@@ -47,6 +47,7 @@ text = "Port
 "
 
 [node name="img" type="TextureRect" parent="panel/margin_inner/horizontal_spacing/name/title"]
+texture_filter = 1
 layout_mode = 2
 texture = ExtResource("2_dbk8m")
 stretch_mode = 5

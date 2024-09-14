@@ -1,6 +1,8 @@
 extends Node2D
+
 var map=[]
 var buildings_map=[]
+var building_classes_map=[]
 var terrain_map=[]
 var map_node_zoom_0_pos
 var tileSize
@@ -72,6 +74,7 @@ const TILE_BORDER_EMPTY=27
 const TILE_BUILDING_FISHING_SITE=28
 const TILE_BUILDING_PORT=29
 const TILE_BUILDING_SHIPYARD=30
+const TILE_BUILDING_LUMBERJACKS_LODGE=31
 const TILE_HILLS_OVERLAY=61
 const TILE_MOUNTAINS_OVERLAY=62
 const TILE_SELECTED=63
@@ -111,7 +114,14 @@ const TILE_NAMES = {
 	TILE_MARSHES: "Marshes",
 	TILE_BUILDING_FISHING_SITE: "Fishing Site",
 	TILE_BUILDING_PORT: "Port",
-	TILE_BUILDING_SHIPYARD: "Shipyard"
+	TILE_BUILDING_SHIPYARD: "Shipyard",
+	TILE_BUILDING_LUMBERJACKS_LODGE: "Lumberjack's Lodge",
+}
+const TILE_DESCRIPTIONS = {
+	TILE_BUILDING_FISHING_SITE: "Gathers Fish in its area",
+	TILE_BUILDING_PORT: "Lets ships go to sea",
+	TILE_BUILDING_SHIPYARD: "Allows the construction of ships. Must be built next to a Port.",
+	TILE_BUILDING_LUMBERJACKS_LODGE: "Gathers Wood in its area"
 }
 const CLIMATE_NAMES={
 	CLIMATE_COLD:"Cold",
@@ -119,6 +129,10 @@ const CLIMATE_NAMES={
 	CLIMATE_TROPICAL:"Tropical"
 }
 const no = preload("res://no.png")
+var CLASSMAP = {
+	"LumberjacksLodge":LumberjacksLodge,
+	"FishingSite":FishingSite,
+}
 var tileToIslandMap={}
 var islandDetails=[]
 @export
@@ -131,16 +145,21 @@ var maxIslandIterations:int
 var minNIslands:int
 @export
 var maxNIslands:int
+@onready
+var buildings = load("res://buildings.gd")
+func zoom_at(zoomdiff, point):
+	pass
 func _input(event):
 	if mapActive:
 		if Input.is_action_pressed("map_move_up"):
 			#if posy>ceil($map_viewport.size.y/zoom/tileSize/2.0):
-			map_node.translate(Vector2(0,tileSize))
+			$map_viewport/cam.offset-=(Vector2(0,tileSize))
 			posy-=1
 		if Input.is_action_pressed("map_move_down"):
 			#print(map_node.position.y,-mapSize*tileSize)
 			#if map_node.position.y>((-mapSize+1)*tileSize+get_viewport_rect().size.y/zoom):
-			map_node.translate(Vector2(0,-tileSize))
+			#map_node.translate(Vector2(0,-tileSize))
+			$map_viewport/cam.offset-=(Vector2(0,-tileSize))
 			posy+=1
 		if Input.is_action_just_pressed("regenerate"):
 			
@@ -150,24 +169,34 @@ func _input(event):
 			#print(mapSize-posx)
 			#print($map_viewport.size.x*zoom/tileSize/2.0)
 			#if (mapSize-posx)>ceil($map_viewport.size.x/zoom/tileSize/2.0):
-			map_node.translate(Vector2(-tileSize,-0))
+			#map_node.translate(Vector2(-tileSize,-0))
+			$map_viewport/cam.offset-=(Vector2(-tileSize,0))
 			posx+=1
 		if Input.is_action_pressed("map_move_left"):
 			#print($map_viewport.size.x/zoom/tileSize/2.0)
 			
-			map_node.translate(Vector2(tileSize,0))
+			$map_viewport/cam.offset-=(Vector2(tileSize,0))
 			posx-=1
 		if Input.is_action_just_pressed("map_zoom_reset"):
 			zoom=1
 			$map_viewport/cam.zoom=Vector2(zoom,zoom)
 		if Input.is_action_just_pressed("map_zoom_full"):
 			#map_node.position=map_node_zoom_0_pos
-			zoom=(864.0/tileSize)/mapSize
+			zoom=(1036.0/tileSize)/mapSize
 			$map_viewport/cam.zoom=Vector2(zoom,zoom)
 		if Input.is_action_pressed("map_zoom_in"):
 			zoom=min(zoom*1.1,10)
-			$map_viewport/cam.zoom=Vector2(zoom,zoom)
+			#print((event.position-$TextureRect.position))
+			var oo = $map_viewport/cam.offset
+			$map_viewport/cam.zoom_at_point((event.position-$TextureRect.position), 1.1)
+			var do = $map_viewport/cam.offset-oo
+			### TODO: set posx, posy according to the changed cam offset
+			posx += do.x/tileSize
+			posy += do.y/tileSize 
 			
+			
+			#print(map_node.position)
+			#$map_viewport/cam.z
 			#print(map_node.position)
 		if Input.is_action_pressed("map_zoom_out"):
 			
@@ -200,8 +229,8 @@ func empty_map(m, fill=0):
 	return m
 func add_ice(m):
 	for x in range(mapSize):
-		var upper_dist=randi_range(20,25)
-		var lower_dist=randi_range(20,25)
+		var upper_dist=randi_range(mapSize/15,mapSize/14)
+		var lower_dist=randi_range(mapSize/15,mapSize/14)
 		for y in range(upper_dist):
 			m[y][x]=TILE_ICE
 		for y in range(mapSize-lower_dist,mapSize):
@@ -447,6 +476,7 @@ func generate_map():
 	#print(map)
 	terrain_map=empty_map(terrain_map,TILE_EMPTY)
 	buildings_map=empty_map(buildings_map,-1)
+	building_classes_map=empty_map(building_classes_map, null)
 	for i in range(randi_range(minNIslands, maxNIslands)):
 		add_island(map,terrain_map)
 	for i in range(mapSize):
@@ -514,8 +544,8 @@ func _ready():
 	print(get_viewport_rect().size)
 	map_node=$map_viewport/cam/map
 	tileSize=map_node.tile_set.tile_size.x
-	map_node_zoom_0_pos=Vector2((-mapSize/2)*tileSize,(-mapSize/2)*tileSize)
-	map_node.translate(map_node_zoom_0_pos)
+	$map_viewport/cam.offset=-Vector2((-mapSize/2)*tileSize,(-mapSize/2)*tileSize)
+	#map_node.translate(map_node_zoom_0_pos)
 	posx=mapSize/2
 	posy=mapSize/2
 	update_labels()
@@ -539,18 +569,24 @@ func _on_start_button_pressed():
 
 
 func _on_build_button_pressed():
-	print($build_dialog_container/build_dialog_viewport.create_entries)
-	$build_dialog_container/build_dialog_viewport.create_entries(map[currentTile.y][currentTile.x], currentTile)
+	
+	$build_dialog_container/build_dialog_viewport.create_entries(map[currentTile.y][currentTile.x], currentTile, map)
 	$build_dialog_container.show()
 	mapActive=false
 
-
+func _on_special_button_pressed():
+	
+	$special_dialog_container/special_dialog_viewport.create_entries(buildings_map[currentTile.y][currentTile.x], currentTile, map)
+	$special_dialog_container.show()
+	mapActive=false
 func _on_dialog_closed():
 	mapActive=true
 
 
 func _on_build_building(building):
+	print(buildings.TILEID_SCENES)
 	buildings_map[currentTile.y][currentTile.x]=building
+	building_classes_map[currentTile.y][currentTile.x]=CLASSMAP[buildings.TILEID_CLASSES[building]].new(currentTile, map)
 	map_node.set_cell(2,currentTile,building,Vector2i(0,0))
 	update_labels()
 

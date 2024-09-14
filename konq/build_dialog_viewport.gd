@@ -11,11 +11,21 @@ func can_place_shipyard(tile):
 		if $/root/root.buildings_map[new_t.y][new_t.x] == game.TILE_BUILDING_PORT:
 			return [true, "Build"]
 	return [false, "Not next to a Port"]
+var CAN_PLACE={
+	game.TILE_BUILDING_SHIPYARD: can_place_shipyard
+}
+func create_building_struct(tile_id):
+	return [game.TILE_NAMES[tile_id], game.TILE_DESCRIPTIONS.get(tile_id, "No description available."), tile_id, CAN_PLACE.get(tile_id, always_enable)]
+@onready
+var BUILDING_FISHING_SITE=create_building_struct(game.TILE_BUILDING_FISHING_SITE)
+@onready
+var BUILDING_PORT=create_building_struct(game.TILE_BUILDING_PORT)
+@onready
+var BUILDING_LUMBERJACKS_LODGE=create_building_struct(game.TILE_BUILDING_LUMBERJACKS_LODGE)
+@onready
+var BUILDING_SHIPYARD=create_building_struct(game.TILE_BUILDING_SHIPYARD)
 
-
-var BUILDING_FISHING_SITE=["Fishing site", "Allows gathering of Fish", game.TILE_BUILDING_FISHING_SITE, always_enable]
-var BUILDING_PORT=["Port", "Lets ships go to sea", game.TILE_BUILDING_PORT, always_enable]
-var BUILDING_SHIPYARD=["Shipyard", "Allows the construction of ships. Must be built next to a port.", game.TILE_BUILDING_SHIPYARD, can_place_shipyard]
+@onready
 var AVAILABLE_BUILDINGS={
 	game.TILE_WATER: [
 		BUILDING_FISHING_SITE,
@@ -26,6 +36,12 @@ var AVAILABLE_BUILDINGS={
 		BUILDING_FISHING_SITE,
 		BUILDING_SHIPYARD,
 	],
+	game.TILE_FOREST: [
+		BUILDING_LUMBERJACKS_LODGE,
+	],
+	game.TILE_JUNGLE: [
+		BUILDING_LUMBERJACKS_LODGE
+	]
 }
 func get_tile_texture(tileid):
 	return tset.get_source(tileid).texture
@@ -36,7 +52,7 @@ func add_entry(entry_name, entry_dsc, entry_tileid, enabled):
 	var sgn:Signal=entry.setup(entry_name,entry_dsc,entry_tileid,texture,enabled)
 	sgn.connect(func():close();get_tree().get_root().get_node("root").build_building.emit(entry_tileid))
 	$scroll/entries.add_child(entry)
-func create_entries(tile_type,tile):
+func create_entries(tile_type,tile, map):
 	print(tile_type)
 	var entries=$scroll/entries
 	for entry in entries.get_children():
@@ -60,3 +76,7 @@ func _input(event):
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
+
+
+func _on_cancel_build_pressed():
+	close()

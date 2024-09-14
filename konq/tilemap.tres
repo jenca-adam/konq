@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=71 format=3 uid="uid://bun6iegpmxpr1"]
+[gd_resource type="TileSet" load_steps=73 format=3 uid="uid://bun6iegpmxpr1"]
 
 [ext_resource type="Texture2D" uid="uid://bvfgc6ua7v52w" path="res://water.png" id="1_fxjjq"]
 [ext_resource type="Texture2D" uid="uid://bhbntxgbljjbs" path="res://grass.png" id="2_bjqb5"]
@@ -29,6 +29,7 @@
 [ext_resource type="Texture2D" uid="uid://c66i6aeonjpyo" path="res://shipyard.png" id="25_kkg28"]
 [ext_resource type="Texture2D" uid="uid://3mju42lrjgw1" path="res://savannah.png" id="25_th2oo"]
 [ext_resource type="Texture2D" uid="uid://bogbj27e1bvga" path="res://hills_overlay.png" id="26_0d03e"]
+[ext_resource type="Texture2D" uid="uid://byew07yex5j5k" path="res://carpenter.png" id="26_hxpst"]
 [ext_resource type="Texture2D" uid="uid://bhdl3bai0fnum" path="res://mountains_overlay.png" id="27_gymyr"]
 [ext_resource type="Texture2D" uid="uid://lhl4fv7qmlt0" path="res://pisspool.png" id="28_u6rck"]
 [ext_resource type="Texture2D" uid="uid://cbut7gy5yqu5e" path="res://empty.png" id="29_prfgg"]
@@ -161,6 +162,11 @@ texture = ExtResource("25_kkg28")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_k5unc"]
+texture = ExtResource("26_hxpst")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jwi6t"]
 texture = ExtResource("23_qb0gh")
 texture_region_size = Vector2i(32, 32)
@@ -248,3 +254,4 @@ sources/27 = SubResource("TileSetAtlasSource_8u2t2")
 sources/28 = SubResource("TileSetAtlasSource_3whll")
 sources/29 = SubResource("TileSetAtlasSource_nb2cq")
 sources/30 = SubResource("TileSetAtlasSource_5040i")
+sources/31 = SubResource("TileSetAtlasSource_k5unc")
