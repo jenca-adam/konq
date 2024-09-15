@@ -151,7 +151,7 @@ var buildings = load("res://buildings.gd")
 
 const enums = preload("res://enums.gd")
 @onready
-var empty_resources = {enums.RESOURCE.WOOD:0, enums.RESOURCE.FISH:0 , enums.RESOURCE.COAL:0, enums.RESOURCE.IRON_ORE:0, enums.RESOURCE.STONE:0, enums.RESOURCE.GOLD:0}#etc
+var empty_resources = {enums.RESOURCE.WOOD:0, enums.RESOURCE.FISH:0 , enums.RESOURCE.COAL:0, enums.RESOURCE.IRON_ORE:0, enums.RESOURCE.STONE:0, enums.RESOURCE.GOLD:0, enums.RESOURCE.OIL:0}#etc
 func zoom_at(zoomdiff, point):
 	pass
 func _input(event):
@@ -354,6 +354,7 @@ func add_island(m,tm):
 				if 0<=new_tile.x and new_tile.x<mapSize and 0<=new_tile.y and new_tile.y<mapSize:
 					break
 			m[new_tile.y][new_tile.x]=1
+			tm[new_tile.y][new_tile.x]=randi_range(0,2)
 			if tileToIslandMap.has(new_tile) and new_tile not in island_tiles and new_tile not in ntiles:
 				island_id=tileToIslandMap[new_tile]
 				#print(new_tile,island_tiles,island_id)
@@ -485,35 +486,42 @@ func show_resource(res):
 			
 func generate_resources(tile, terrain):
 	randomize()
+	
 	var rs =empty_resources.duplicate()
 	if tile == TILE_FOREST:
 		
 		rs[enums.RESOURCE.WOOD]=randi_range(10,50)
 	if tile == TILE_JUNGLE:
-		rs[enums.RESOURCE.WOOD]=randi_range(40,100)
+		rs[enums.RESOURCE.WOOD]=randi_range(40,99)
 	if tile == TILE_ICE:
-		rs[enums.RESOURCE.GOLD]=randi_range(0,30)
-		rs[enums.RESOURCE.OIL]=randi_range(0,30)
+		if randi_range(0,5)==0:
+			rs[enums.RESOURCE.GOLD]=randi_range(0,99)
+		if randi_range(0,1)==0:
+			rs[enums.RESOURCE.OIL]=randi_range(0,50)
 	if tile == TILE_TUNDRA:
-		rs[enums.RESOURCE.GOLD]=randi_range(0,20)
-		rs[enums.RESOURCE.OIL]=randi_range(0,20)
+		if randi_range(0,7)==0:
+			rs[enums.RESOURCE.GOLD]=randi_range(0,30)
+		if randi_range(0,2)==0:
+			rs[enums.RESOURCE.OIL]=randi_range(0,20)
 	if tile == TILE_MARSHES and terrain==TERRAIN_FLAT:
 		rs[enums.RESOURCE.COAL]=randi_range(0,20)
 		
 	if tile == TILE_COASTAL:
-		rs[enums.RESOURCE.FISH]=randi_range(10,100)
-		if randi_range(0,10)==0:
-			rs[enums.RESOURCE.OIL]=randi_range(20,100)
+		rs[enums.RESOURCE.FISH]=randi_range(10,99)
+		if randi_range(0,5)==0:
+			rs[enums.RESOURCE.OIL]=randi_range(20,99)
+	if tile == TILE_WATER:
+		rs[enums.RESOURCE.FISH]=randi_range(0,20)
 	if tile == TILE_GRASS and terrain==TERRAIN_FLAT:
 		if randi_range(0,10)==0:
 			rs[enums.RESOURCE.COAL]=randi_range(20,40)
 	if terrain==TERRAIN_ALPINE and tile in [TILE_FOREST, TILE_JUNGLE, TILE_DESERT, TILE_PLAINS, TILE_GRASS, TILE_TUNDRA]:
-		rs[enums.RESOURCE.STONE]=randi_range(40,100)
-		if randi_range(0,9)==0:
+		rs[enums.RESOURCE.STONE]=randi_range(40,99)
+		if randi_range(0,7)==0:
 			rs[enums.RESOURCE.IRON_ORE]=randi_range(20,50)
 	if terrain==TERRAIN_HILLY and tile in [TILE_FOREST, TILE_JUNGLE, TILE_DESERT, TILE_PLAINS, TILE_GRASS, TILE_TUNDRA]:
 		rs[enums.RESOURCE.STONE]=randi_range(20,60)
-		if randi_range(0,12)==0:
+		if randi_range(0,7)==0:
 			rs[enums.RESOURCE.IRON_ORE]=randi_range(0,45)
 	
 	return rs
@@ -534,7 +542,7 @@ func generate_map():
 			resources_map[i][j]=generate_resources(map[i][j], terrain_map[i][j])
 			
 			map_node.set_cell(0,Vector2i(j,i),map[i][j],Vector2i(0,0))
-			map_node.set_cell(2,Vector2i(j,i),terrain_map[i][j],Vector2i(0,0))
+			#map_node.set_cell(2,Vector2i(j,i),terrain_map[i][j],Vector2i(0,0))
 func adjacentToIslands(islands,tile):
 	
 	for neighb in DIRECTIONS:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://boei2k7sjeamr"]
+[gd_scene load_steps=20 format=3 uid="uid://boei2k7sjeamr"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_q334g"]
 [ext_resource type="Texture2D" uid="uid://bvfgc6ua7v52w" path="res://water.png" id="2_jbic1"]
@@ -13,6 +13,10 @@
 [ext_resource type="Script" path="res://special_dialog_viewport.gd" id="10_ddglg"]
 [ext_resource type="Texture2D" uid="uid://kdotsphloq42" path="res://coins.png" id="11_dw1ln"]
 [ext_resource type="Texture2D" uid="uid://bfjnx0f2xmha4" path="res://fishing.png" id="12_pmpup"]
+[ext_resource type="Texture2D" uid="uid://2m1l6pmvf3uh" path="res://coal.png" id="12_xw34e"]
+[ext_resource type="Texture2D" uid="uid://cff2ubp4yggaf" path="res://stone.png" id="13_dtnq4"]
+[ext_resource type="Texture2D" uid="uid://dob7utt5l804o" path="res://iron_ore.png" id="14_a4tlk"]
+[ext_resource type="Texture2D" uid="uid://dfsnq8lwb0ktp" path="res://oil.png" id="16_spch5"]
 [ext_resource type="Script" path="res://build_dialog_viewport.gd" id="35_0jeg8"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_oqmv7"]
@@ -50,6 +54,7 @@ tile_set = ExtResource("3_t2r5s")
 format = 2
 layer_0/name = "tiles"
 layer_1/name = "resources_layer"
+layer_1/modulate = Color(1, 1, 1, 0.784314)
 layer_1/tile_data = PackedInt32Array()
 layer_2/name = "terrain"
 layer_2/z_index = 1
@@ -173,15 +178,19 @@ popup/item_3/text = "Gold"
 popup/item_3/icon = ExtResource("11_dw1ln")
 popup/item_3/id = 45
 popup/item_4/text = "Coal"
+popup/item_4/icon = ExtResource("12_xw34e")
 popup/item_4/id = 42
 popup/item_5/text = "Stone"
+popup/item_5/icon = ExtResource("13_dtnq4")
 popup/item_5/id = 47
 popup/item_6/text = "Fish"
 popup/item_6/icon = ExtResource("12_pmpup")
 popup/item_6/id = 46
 popup/item_7/text = "Iron Ore"
+popup/item_7/icon = ExtResource("14_a4tlk")
 popup/item_7/id = 48
 popup/item_8/text = "Oil"
+popup/item_8/icon = ExtResource("16_spch5")
 popup/item_8/id = 43
 
 [node name="build_dialog_container" type="SubViewportContainer" parent="."]
