@@ -1,0 +1,55 @@
+[gd_scene load_steps=4 format=3 uid="uid://cw76x385rwiy7"]
+
+[ext_resource type="Texture2D" uid="uid://b7diqkmegmtrn" path="res://port.png" id="1_cnynu"]
+[ext_resource type="PackedScene" uid="uid://f81q1xjtr4w7" path="res://ship.tscn" id="2_sjq4b"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spvlx"]
+bg_color = Color(0.241156, 0.241156, 0.241156, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 20
+
+[node name="port" type="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -840.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spvlx")
+
+[node name="vbox" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 1080.0
+offset_bottom = 1080.0
+
+[node name="title" type="HBoxContainer" parent="vbox"]
+layout_mode = 2
+alignment = 1
+
+[node name="PORT_IMG" type="TextureRect" parent="vbox/title"]
+texture_filter = 1
+layout_mode = 2
+texture = ExtResource("1_cnynu")
+expand_mode = 2
+
+[node name="PORT_NAME" type="Label" parent="vbox/title"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 55
+text = "Port
+"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="vbox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ships" type="VBoxContainer" parent="vbox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ship" parent="vbox/ScrollContainer/ships" instance=ExtResource("2_sjq4b")]
+layout_mode = 2

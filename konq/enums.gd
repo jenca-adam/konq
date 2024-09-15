@@ -1,0 +1,10 @@
+extends Node
+enum RESOURCE{
+	WOOD=44,
+	FISH=46,
+	IRON_ORE=48,
+	STONE=47,
+	GOLD=45,
+	OIL=43,
+	COAL=42,
+}

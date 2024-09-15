@@ -4,12 +4,13 @@ var map=[]
 var buildings_map=[]
 var building_classes_map=[]
 var terrain_map=[]
+var resources_map=[]
 var map_node_zoom_0_pos
 var tileSize
 var posx
 var posy
-var consonants="bcdfghjklmnpqrstvwxzčćçďĺľñňŕřśšťžź"
-var vowels="aǎâäãåąàȧáeéěẽěêĕęèėiíǐĩǐîĭįìıíïoóǒôõǫòȯőöuúǔũǔûŭůųùúűü"
+var consonants="bcdfghjklmnpqrstvwxz"#čćçďĺľñňŕřśšťžź"
+var vowels=["a","e","i","o","u","y","ea","oa","ee","oo","aa","ia","ie","ya","ye","yu"]#"aǎâäãåąàȧáeéěẽěêĕęèėiíǐĩǐîĭįìıíïoóǒôõǫòȯőöuúǔũǔûŭůųùúűü"
 var map_node:TileMap
 var currentTile
 var pickingAnIsland=true
@@ -147,6 +148,10 @@ var minNIslands:int
 var maxNIslands:int
 @onready
 var buildings = load("res://buildings.gd")
+
+const enums = preload("res://enums.gd")
+@onready
+var empty_resources = {enums.RESOURCE.WOOD:0, enums.RESOURCE.FISH:0 , enums.RESOURCE.COAL:0, enums.RESOURCE.IRON_ORE:0, enums.RESOURCE.STONE:0, enums.RESOURCE.GOLD:0}#etc
 func zoom_at(zoomdiff, point):
 	pass
 func _input(event):
@@ -210,14 +215,14 @@ func _input(event):
 				var ct = Vector2i(floor((event.global_position/zoom-$TextureRect.position/zoom+(Vector2(posx-$map_viewport.size.x/zoom/tileSize/2.0,posy-$map_viewport.size.y/zoom/tileSize/2.0)*tileSize))/tileSize))
 				if ct==currentTile:
 					currentTile=null
-					map_node.clear_layer(3)
 					map_node.clear_layer(4)
+					map_node.clear_layer(5)
 				else:
 					if 0<=ct.x and ct.x<mapSize and 0<=ct.y and ct.y<mapSize:
 						currentTile=ct
 						map_node.clear_layer(4)
-						map_node.clear_layer(3)
-						map_node.set_cell(4,currentTile,TILE_SELECTED,Vector2i(0,0))
+						map_node.clear_layer(5)
+						map_node.set_cell(5,currentTile,TILE_SELECTED,Vector2i(0,0))
 		update_labels()
 func empty_map(m, fill=0):
 	m=[]
@@ -251,7 +256,7 @@ func highlight_island(tl,m):
 			if w.y<0 or w.y>=mapSize or 0>w.x or w.x>mapSize or w not in tl:
 				surr[index]=1
 			index+=1
-		map_node.set_cell(3,tile,DIR_TO_BORDER_MAP[surr],Vector2i(0,0))
+		map_node.set_cell(4,tile,DIR_TO_BORDER_MAP[surr],Vector2i(0,0))
 func add_subislands(tl,tp,it,m,cl):
 	var ns
 	if it<7:
@@ -468,6 +473,50 @@ func add_island(m,tm):
 	var details={"id":island_id,"tiles":island_tiles,"iterations":iterations,"center_tile":island_start,"terrain":terrain,"climate":climate,"name":island_name,"dry":dry}
 	#print(details)
 	islandDetails.append(details)
+	
+func show_resource(res):
+	for i in range(mapSize):
+		for j in range(mapSize):
+			
+			var tileNum = int((resources_map[i][j][res]+10)/11)
+			var tilePos = Vector2i(tileNum%5, tileNum/5)
+			if tileNum!=0:print("TILE",tilePos)
+			map_node.set_cell(1,Vector2i(j,i),res,tilePos)
+			
+func generate_resources(tile, terrain):
+	randomize()
+	var rs =empty_resources.duplicate()
+	if tile == TILE_FOREST:
+		
+		rs[enums.RESOURCE.WOOD]=randi_range(10,50)
+	if tile == TILE_JUNGLE:
+		rs[enums.RESOURCE.WOOD]=randi_range(40,100)
+	if tile == TILE_ICE:
+		rs[enums.RESOURCE.GOLD]=randi_range(0,30)
+		rs[enums.RESOURCE.OIL]=randi_range(0,30)
+	if tile == TILE_TUNDRA:
+		rs[enums.RESOURCE.GOLD]=randi_range(0,20)
+		rs[enums.RESOURCE.OIL]=randi_range(0,20)
+	if tile == TILE_MARSHES and terrain==TERRAIN_FLAT:
+		rs[enums.RESOURCE.COAL]=randi_range(0,20)
+		
+	if tile == TILE_COASTAL:
+		rs[enums.RESOURCE.FISH]=randi_range(10,100)
+		if randi_range(0,10)==0:
+			rs[enums.RESOURCE.OIL]=randi_range(20,100)
+	if tile == TILE_GRASS and terrain==TERRAIN_FLAT:
+		if randi_range(0,10)==0:
+			rs[enums.RESOURCE.COAL]=randi_range(20,40)
+	if terrain==TERRAIN_ALPINE and tile in [TILE_FOREST, TILE_JUNGLE, TILE_DESERT, TILE_PLAINS, TILE_GRASS, TILE_TUNDRA]:
+		rs[enums.RESOURCE.STONE]=randi_range(40,100)
+		if randi_range(0,9)==0:
+			rs[enums.RESOURCE.IRON_ORE]=randi_range(20,50)
+	if terrain==TERRAIN_HILLY and tile in [TILE_FOREST, TILE_JUNGLE, TILE_DESERT, TILE_PLAINS, TILE_GRASS, TILE_TUNDRA]:
+		rs[enums.RESOURCE.STONE]=randi_range(20,60)
+		if randi_range(0,12)==0:
+			rs[enums.RESOURCE.IRON_ORE]=randi_range(0,45)
+	
+	return rs
 func generate_map():
 	tileToIslandMap={}
 	islandDetails=[]
@@ -477,12 +526,15 @@ func generate_map():
 	terrain_map=empty_map(terrain_map,TILE_EMPTY)
 	buildings_map=empty_map(buildings_map,-1)
 	building_classes_map=empty_map(building_classes_map, null)
+	resources_map=empty_map(resources_map, empty_resources)
 	for i in range(randi_range(minNIslands, maxNIslands)):
 		add_island(map,terrain_map)
 	for i in range(mapSize):
 		for j in range(mapSize):
+			resources_map[i][j]=generate_resources(map[i][j], terrain_map[i][j])
+			
 			map_node.set_cell(0,Vector2i(j,i),map[i][j],Vector2i(0,0))
-			map_node.set_cell(1,Vector2i(j,i),terrain_map[i][j],Vector2i(0,0))
+			map_node.set_cell(2,Vector2i(j,i),terrain_map[i][j],Vector2i(0,0))
 func adjacentToIslands(islands,tile):
 	
 	for neighb in DIRECTIONS:
@@ -492,6 +544,7 @@ func adjacentToIslands(islands,tile):
 				
 				return true
 	return false
+
 func update_labels():
 	$labels/labels_left/pos.text="x: "+str(posx)+"; y: "+str(posy)
 	$labels/labels_right/zoom_label.text="zoom: "+str(zoom)
@@ -504,7 +557,7 @@ func update_labels():
 		currentIsland=tileToIslandMap[currentTile]
 		highlight_island(islandDetails[tileToIslandMap[currentTile]]["tiles"],map)
 		$labels/labels_right/island_name_label.text="island name: "+islandDetails[tileToIslandMap[currentTile]]["name"]+"\n"+\
-		"island climate: "+CLIMATE_NAMES[(islandDetails[tileToIslandMap[currentTile]]["climate"])]
+		"island climate: "+CLIMATE_NAMES[(islandDetails[tileToIslandMap[currentTile]]["climate"])]+str(resources_map[currentTile.y][currentTile.x])
 		if pickingAnIsland:
 			$labels/labels_right/start_button.show()
 			$labels/labels_right/start_button.disabled=false
@@ -584,14 +637,29 @@ func _on_dialog_closed():
 
 
 func _on_build_building(building):
-	print(buildings.TILEID_SCENES)
-	buildings_map[currentTile.y][currentTile.x]=building
-	building_classes_map[currentTile.y][currentTile.x]=CLASSMAP[buildings.TILEID_CLASSES[building]].new(currentTile, map)
-	map_node.set_cell(2,currentTile,building,Vector2i(0,0))
-	update_labels()
+	
+	if building not in buildings.TILEID_CLASSES:
+		$ERROR.dialog_text="No building class for %d"%building
+		$ERROR.popup_centered()
+		
+	else:
+		buildings_map[currentTile.y][currentTile.x]=building
+		building_classes_map[currentTile.y][currentTile.x]=CLASSMAP[buildings.TILEID_CLASSES[building]].new(currentTile, map)
+		map_node.set_cell(3,currentTile,building,Vector2i(0,0))
+		update_labels()
 
 
 func _on_demolish_button_pressed():
 	buildings_map[currentTile.y][currentTile.x]=-1
-	map_node.set_cell(2,currentTile,-1)
+	map_node.set_cell(3,currentTile,-1)
 	update_labels()
+
+
+func _on_map_type_item_selected(index):
+	
+	var map_type_node = $labels/labels_right/action_buttons/MapType
+	var id = map_type_node.get_item_id(index)
+	if id in enums.RESOURCE.values():
+		show_resource(id)
+	else:
+		map_node.clear_layer(1)

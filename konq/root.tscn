@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://boei2k7sjeamr"]
+[gd_scene load_steps=16 format=3 uid="uid://boei2k7sjeamr"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_q334g"]
 [ext_resource type="Texture2D" uid="uid://bvfgc6ua7v52w" path="res://water.png" id="2_jbic1"]
@@ -9,8 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://bdo0oqc2wehvu" path="res://no.png" id="6_1502a"]
 [ext_resource type="Texture2D" uid="uid://chj2jdtnjukip" path="res://info.png" id="6_jyehc"]
 [ext_resource type="Texture2D" uid="uid://c48j40cueh1ht" path="res://demolish.png" id="7_7r7xq"]
+[ext_resource type="Texture2D" uid="uid://bhffk0yu4co6k" path="res://wood.png" id="10_ceb37"]
 [ext_resource type="Script" path="res://special_dialog_viewport.gd" id="10_ddglg"]
-[ext_resource type="PackedScene" uid="uid://dg4p3hsiqtxq2" path="res://gathering_unit.tscn" id="12_b3ltj"]
+[ext_resource type="Texture2D" uid="uid://kdotsphloq42" path="res://coins.png" id="11_dw1ln"]
+[ext_resource type="Texture2D" uid="uid://bfjnx0f2xmha4" path="res://fishing.png" id="12_pmpup"]
 [ext_resource type="Script" path="res://build_dialog_viewport.gd" id="35_0jeg8"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_oqmv7"]
@@ -32,6 +34,7 @@ size = Vector2i(1036, 1036)
 ignore_rotation = false
 process_callback = 0
 script = ExtResource("2_k5sxv")
+ZOOM_FACTOR = 0.1
 
 [node name="w" type="TextureRect" parent="map_viewport/cam"]
 offset_left = -500000.0
@@ -42,22 +45,25 @@ texture = ExtResource("2_jbic1")
 expand_mode = 1
 
 [node name="map" type="TileMap" parent="map_viewport/cam"]
+texture_filter = 1
 tile_set = ExtResource("3_t2r5s")
 format = 2
 layer_0/name = "tiles"
-layer_1/name = "terrain"
-layer_1/z_index = 1
+layer_1/name = "resources_layer"
 layer_1/tile_data = PackedInt32Array()
-layer_2/name = "buildings"
-layer_2/z_index = 3
+layer_2/name = "terrain"
+layer_2/z_index = 1
 layer_2/tile_data = PackedInt32Array()
-layer_3/name = "highlights"
-layer_3/modulate = Color(1, 1, 1, 0.498039)
-layer_3/z_index = 2
+layer_3/name = "buildings"
+layer_3/z_index = 3
 layer_3/tile_data = PackedInt32Array()
-layer_4/name = "overlays"
-layer_4/z_index = 4
+layer_4/name = "highlights"
+layer_4/modulate = Color(1, 1, 1, 0.498039)
+layer_4/z_index = 2
 layer_4/tile_data = PackedInt32Array()
+layer_5/name = "overlays"
+layer_5/z_index = 4
+layer_5/tile_data = PackedInt32Array()
 script = ExtResource("3_in0ut")
 
 [node name="TextureRect" type="TextureRect" parent="."]
@@ -118,7 +124,6 @@ text = "Pick island
 "
 
 [node name="action_buttons" type="VBoxContainer" parent="labels/labels_right"]
-visible = false
 layout_mode = 2
 
 [node name="action_buttons_row_1" type="HBoxContainer" parent="labels/labels_right/action_buttons"]
@@ -149,6 +154,35 @@ layout_mode = 2
 text = "Info
 "
 icon = ExtResource("6_jyehc")
+
+[node name="MapType" type="OptionButton" parent="labels/labels_right/action_buttons"]
+layout_mode = 2
+item_count = 9
+selected = 0
+allow_reselect = true
+popup/item_0/text = "Tiles"
+popup/item_0/icon = ExtResource("2_jbic1")
+popup/item_0/id = 0
+popup/item_1/text = "Resources"
+popup/item_1/id = 1
+popup/item_1/separator = true
+popup/item_2/text = "Wood"
+popup/item_2/icon = ExtResource("10_ceb37")
+popup/item_2/id = 44
+popup/item_3/text = "Gold"
+popup/item_3/icon = ExtResource("11_dw1ln")
+popup/item_3/id = 45
+popup/item_4/text = "Coal"
+popup/item_4/id = 42
+popup/item_5/text = "Stone"
+popup/item_5/id = 47
+popup/item_6/text = "Fish"
+popup/item_6/icon = ExtResource("12_pmpup")
+popup/item_6/id = 46
+popup/item_7/text = "Iron Ore"
+popup/item_7/id = 48
+popup/item_8/text = "Oil"
+popup/item_8/id = 43
 
 [node name="build_dialog_container" type="SubViewportContainer" parent="."]
 visible = false
@@ -212,8 +246,11 @@ offset_bottom = 1080.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="gathering_unit" parent="special_dialog_container/special_dialog_viewport/sd_cont" instance=ExtResource("12_b3ltj")]
-layout_mode = 2
+[node name="ERROR" type="AcceptDialog" parent="."]
+title = "ERROR!"
+initial_position = 1
+size = Vector2i(113, 100)
+dialog_text = "ERROR_TEXT"
 
 [connection signal="build_building" from="." to="." method="_on_build_building"]
 [connection signal="dialog_closed" from="." to="." method="_on_dialog_closed"]
@@ -221,4 +258,5 @@ layout_mode = 2
 [connection signal="pressed" from="labels/labels_right/action_buttons/action_buttons_row_1/build_button" to="." method="_on_build_button_pressed"]
 [connection signal="pressed" from="labels/labels_right/action_buttons/action_buttons_row_1/demolish_button" to="." method="_on_demolish_button_pressed"]
 [connection signal="pressed" from="labels/labels_right/action_buttons/action_buttons_row_2/special_button" to="." method="_on_special_button_pressed"]
+[connection signal="item_selected" from="labels/labels_right/action_buttons/MapType" to="." method="_on_map_type_item_selected"]
 [connection signal="pressed" from="build_dialog_container/build_dialog_viewport/cancel_build" to="build_dialog_container/build_dialog_viewport" method="_on_cancel_build_pressed"]

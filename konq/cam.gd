@@ -4,8 +4,7 @@ var ZOOM_FACTOR=0.5
 # Function to zoom at a specific point
 func zoom_at_point(target_point: Vector2, zoom_factor: float):
 	# Current zoom and offset
-	print("TP", target_point)
-	print(target_point+offset-get_viewport_rect().size/2)
+	
 
 
 
