@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://boei2k7sjeamr"]
+[gd_scene load_steps=21 format=3 uid="uid://boei2k7sjeamr"]
 
 [ext_resource type="Script" path="res://root.gd" id="1_q334g"]
 [ext_resource type="Texture2D" uid="uid://bvfgc6ua7v52w" path="res://water.png" id="2_jbic1"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://cff2ubp4yggaf" path="res://stone.png" id="13_dtnq4"]
 [ext_resource type="Texture2D" uid="uid://dob7utt5l804o" path="res://iron_ore.png" id="14_a4tlk"]
 [ext_resource type="Texture2D" uid="uid://dfsnq8lwb0ktp" path="res://oil.png" id="16_spch5"]
+[ext_resource type="PackedScene" uid="uid://bl5m0vvjq4cxu" path="res://tree.tscn" id="19_udq5j"]
 [ext_resource type="Script" path="res://build_dialog_viewport.gd" id="35_0jeg8"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_oqmv7"]
@@ -54,7 +55,6 @@ tile_set = ExtResource("3_t2r5s")
 format = 2
 layer_0/name = "tiles"
 layer_1/name = "resources_layer"
-layer_1/modulate = Color(1, 1, 1, 0.784314)
 layer_1/tile_data = PackedInt32Array()
 layer_2/name = "terrain"
 layer_2/z_index = 1
@@ -120,6 +120,9 @@ text = "
 [node name="zoom_label" type="Label" parent="labels/labels_right"]
 layout_mode = 2
 text = "Zoom: 1.0"
+
+[node name="resources_label" type="Label" parent="labels/labels_right"]
+layout_mode = 2
 
 [node name="start_button" type="Button" parent="labels/labels_right"]
 visible = false
@@ -254,6 +257,25 @@ offset_right = 1080.0
 offset_bottom = 1080.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="tree_container" type="SubViewportContainer" parent="."]
+visible = false
+offset_left = 420.0
+offset_right = 1500.0
+offset_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="tree_viewport" type="SubViewport" parent="tree_container"]
+handle_input_locally = false
+size = Vector2i(1080, 1080)
+size_2d_override = Vector2i(1080, 1080)
+size_2d_override_stretch = true
+render_target_update_mode = 0
+
+[node name="tree" parent="tree_container/tree_viewport" instance=ExtResource("19_udq5j")]
+offset_right = 0.0
 
 [node name="ERROR" type="AcceptDialog" parent="."]
 title = "ERROR!"

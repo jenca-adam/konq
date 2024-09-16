@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://bl5m0vvjq4cxu"]
+
+[ext_resource type="Script" path="res://tree.gd" id="1_e7enb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spvlx"]
+bg_color = Color(0.241156, 0.241156, 0.241156, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 20
+
+[node name="tree" type="ScrollContainer"]
+texture_filter = 4
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -840.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_e7enb")
+
+[node name="panel" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_spvlx")
+
+[node name="margin" type="MarginContainer" parent="panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="tree_items" type="HBoxContainer" parent="panel/margin"]
+layout_mode = 2
+size_flags_horizontal = 3

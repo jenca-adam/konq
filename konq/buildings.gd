@@ -1,7 +1,7 @@
 extends Node
 const game = preload("res://root.gd")
-const TILEID_CLASSES={
-	game.TILE_BUILDING_LUMBERJACKS_LODGE : "LumberjacksLodge",
+const TILEID_CLASSES = {
+	game.TILE_BUILDING_LUMBERJACKS_LODGE: "LumberjacksLodge",
 	game.TILE_BUILDING_FISHING_SITE: "FishingSite"
 }
 const TILEID_SCENES = {

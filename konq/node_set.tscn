@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://sycueagm2xy6"]
+
+[ext_resource type="Script" path="res://node_set.gd" id="1_a4ry3"]
+
+[node name="nodeSet" type="VBoxContainer"]
+size_flags_vertical = 4
+script = ExtResource("1_a4ry3")

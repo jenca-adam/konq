@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=87 format=3 uid="uid://bun6iegpmxpr1"]
+[gd_resource type="TileSet" load_steps=99 format=3 uid="uid://bun6iegpmxpr1"]
 
 [ext_resource type="Texture2D" uid="uid://bvfgc6ua7v52w" path="res://water.png" id="1_fxjjq"]
 [ext_resource type="Texture2D" uid="uid://bhbntxgbljjbs" path="res://grass.png" id="2_bjqb5"]
@@ -32,15 +32,21 @@
 [ext_resource type="Texture2D" uid="uid://byew07yex5j5k" path="res://carpenter.png" id="26_hxpst"]
 [ext_resource type="Texture2D" uid="uid://bhdl3bai0fnum" path="res://mountains_overlay.png" id="27_gymyr"]
 [ext_resource type="Texture2D" uid="uid://cun26olvh35me" path="res://stone_tiles.png" id="27_if8ef"]
+[ext_resource type="Texture2D" uid="uid://3fpp10xj0q33" path="res://oil_well.png" id="27_mnsvl"]
 [ext_resource type="Texture2D" uid="uid://lhl4fv7qmlt0" path="res://pisspool.png" id="28_u6rck"]
+[ext_resource type="Texture2D" uid="uid://cx7hkfwxtoox7" path="res://oil_rig.png" id="28_v7w6e"]
 [ext_resource type="Texture2D" uid="uid://4pj55tgj65qw" path="res://coal_tiles.png" id="29_7hidb"]
+[ext_resource type="Texture2D" uid="uid://3abws02x3fdf" path="res://quarry.png" id="29_chwx7"]
 [ext_resource type="Texture2D" uid="uid://cbut7gy5yqu5e" path="res://empty.png" id="29_prfgg"]
+[ext_resource type="Texture2D" uid="uid://bo3hdilqm0ygm" path="res://gold_mine.png" id="30_gfq4c"]
 [ext_resource type="Texture2D" uid="uid://co7gj7g40chq7" path="res://oil_tiles.png" id="30_gva4t"]
 [ext_resource type="Texture2D" uid="uid://bf2ulod0f3bbc" path="res://desert.png" id="30_w8mxp"]
 [ext_resource type="Texture2D" uid="uid://cfrvrp24ywsja" path="res://wood_tiles.png" id="31_6cafv"]
 [ext_resource type="Texture2D" uid="uid://coe5fjflsnliq" path="res://mountains.png" id="31_mvk5p"]
+[ext_resource type="Texture2D" uid="uid://b7g24340dygs8" path="res://iron_mine.png" id="31_v5q4w"]
 [ext_resource type="Texture2D" uid="uid://bws0d3h1133qm" path="res://snow.png" id="32_2fh02"]
 [ext_resource type="Texture2D" uid="uid://bs0w58anro675" path="res://gold_tiles.png" id="32_6i043"]
+[ext_resource type="Texture2D" uid="uid://baglv3gp6xu4g" path="res://coal_mine.png" id="32_tsmg7"]
 [ext_resource type="Texture2D" uid="uid://b1v3o7tkeu45u" path="res://fish_tiles.png" id="33_6iwpw"]
 [ext_resource type="Texture2D" uid="uid://kxescwyucpdj" path="res://iron_tiles.png" id="34_3gx8d"]
 
@@ -171,6 +177,36 @@ texture_region_size = Vector2i(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_k5unc"]
 texture = ExtResource("26_hxpst")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vk57l"]
+texture = ExtResource("27_mnsvl")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yante"]
+texture = ExtResource("28_v7w6e")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4mk0j"]
+texture = ExtResource("29_chwx7")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_a87xc"]
+texture = ExtResource("30_gfq4c")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3q5u7"]
+texture = ExtResource("31_v5q4w")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3wmyt"]
+texture = ExtResource("32_tsmg7")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 
@@ -367,3 +403,9 @@ sources/45 = SubResource("TileSetAtlasSource_naqqu")
 sources/46 = SubResource("TileSetAtlasSource_a4blt")
 sources/47 = SubResource("TileSetAtlasSource_d7bui")
 sources/48 = SubResource("TileSetAtlasSource_b2s2l")
+sources/32 = SubResource("TileSetAtlasSource_vk57l")
+sources/33 = SubResource("TileSetAtlasSource_yante")
+sources/34 = SubResource("TileSetAtlasSource_4mk0j")
+sources/35 = SubResource("TileSetAtlasSource_a87xc")
+sources/36 = SubResource("TileSetAtlasSource_3q5u7")
+sources/37 = SubResource("TileSetAtlasSource_3wmyt")
