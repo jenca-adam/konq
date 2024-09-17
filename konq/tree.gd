@@ -9,7 +9,8 @@ var swipe_start: Vector2
 var swipe_mouse_start: Vector2
 var swipe_mouse_times: Array[int] = []
 var swipe_mouse_positions: Array[Vector2] = []
-
+func _process(delta):
+	$lines.global_position=-Vector2(scroll_horizontal, scroll_vertical)
 func _input(event: InputEvent) -> void:
 	print(event)
 	if event is InputEventMouseButton:
@@ -50,43 +51,117 @@ func _input(event: InputEvent) -> void:
 const TECH_TREE = [
 	[
 		{
+			"name":"Forestry",
+			"description":"Allows the construction of Lumberjack's Lodges.",
+			"cost":40,
+			"requires":[],
+			"unlocks":[],
+			"margin":0
+		},
+		
+		{
 			"name":"Ships",
 			"description":"Allows the construction of Ports and Shipyards. Unlocks the Raft",
 			"cost":50,
 			"requires":[],
-			"unlocks":[0, 1],
+			"unlocks":["Sailing", "Shipmaking 1"],
+			"margin":100,
+		},
+		{
+			"name":"Farming",
+			"description":"Allows the construction of Farms.",
+			"cost":65,
+			"requires":[],
+			"unlocks":["Cotton", "Horses"],
+			"margin":100,
+		},
+		
+	],
+	[
+		{
+			"name": "Woodworking",
+			"description": "Allows the construction of Sawmills",
+			"cost":80,
+			"requires":["Forestry"],
+			"unlocks":[],
+			"margin":0,
+		},
+		{
+			"name": "Shipmaking I",
+			"description": "Decreases the cost of all ships by 5%",
+			"cost":60,
+			"requires":["Ships"],
+			"unlocks":[],
+			"margin":50
+		},
+		{
+			"name": "Cotton",
+			"description": "Enables the construction of Cotton Farms",
+			"cost": 50,
+			"requires":["Farming"],
+			"unlocks":[],
+			"margin":50,
+			},
+		{
+			"name": "Horses",
+			"description": "Allows the building of Stables",
+			"cost": 60,
+			"requires":["Farming"],
+			"unlocks":[],
 			"margin":0,
 		}
 	],
 	[
 		{
-			"name": "Sailing",
-			"description": "Unlocks the Yacht",
-			"cost":75,
-			"requires":[0],
+			"name":"Paper",
+			"description": "<TODO>",
+			"cost": 70,
+			"requires":["Woodworking"],
 			"unlocks":[],
 			"margin":0
 		},
 		{
-			"name": "Shipmaking I",
-			"description": "Decreases the cost of all ships by 15%",
+			"name": "Shipmaking II",
+			"description": "Decreases the cost of all ships by 10%",
 			"cost":60,
-			"requires":[0],
+			"requires":["Shipmaking I"],
 			"unlocks":[],
-			"margin":20
+			"margin":50
+		},
+		{
+			"name": "Sailing",
+			"description": "Unlocks the Yacht",
+			"cost":75,
+			"requires":["Shipmaking I", "Cotton"],
+			"unlocks":[],
+			"margin":0,
+		},
+		{
+			"name": "Carriages",
+			"description": "Allows the construction of Carriages",
+			"cost": 90,
+			"requires":["Horses","Woodworking"],
+			"unlocks":[],
+			"margin":50
 		}
 	]
 	
 ]
-
+var NAME_TO_POS_MAP = {}
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	
+	var index=0
 	for level in TECH_TREE:
+		var li = 0
+		for node in level:
+			NAME_TO_POS_MAP[node["name"]]=Vector2i(index,li)
+			li+=1
 		var node_set = load("res://node_set.tscn").instantiate()
-		node_set.setup(level)
+		
 		$panel/margin/tree_items.add_child(node_set)
-
-
+		node_set.setup(level,TECH_TREE,NAME_TO_POS_MAP)
+		index+=1
+	print(NAME_TO_POS_MAP)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+
