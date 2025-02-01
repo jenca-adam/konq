@@ -163,5 +163,8 @@ func _ready():
 		node_set.setup(level,TECH_TREE,NAME_TO_POS_MAP)
 		index+=1
 	print(NAME_TO_POS_MAP)
+func recolor():
+	for child in $panel/margin/tree_items.get_children():
+		for node in child.get_children():
+			node.recolor()
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-

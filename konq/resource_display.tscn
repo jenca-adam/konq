@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://dls3bf2swhidx"]
+
+[ext_resource type="Script" path="res://resource_display.gd" id="1_ei21w"]
+
+[node name="resourceDisplay" type="HBoxContainer"]
+script = ExtResource("1_ei21w")
+
+[node name="icon" type="RichTextLabel" parent="."]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_font_sizes/normal_font_size = 40
+bbcode_enabled = true
+text = "[img]coins.png[/img]"
+fit_content = true
+
+[node name="CONTENT" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_font_sizes/font_size = 33
+text = "420"

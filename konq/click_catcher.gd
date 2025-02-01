@@ -22,5 +22,3 @@ func _on_mouse_entered():
 func _on_mouse_exited():
 	print("HOVER")
 	get_parent().exit_hover()
-
-

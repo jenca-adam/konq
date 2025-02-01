@@ -1,4 +1,14 @@
 extends Node2D
+signal propertyChanged(value, propertyName)
+var money:
+	get:
+		return money
+	set(value):
+		
+		propertyChanged.emit(value,"money")
+		money=value
+		$tree_container/tree_viewport/VBoxContainer/tree.recolor()
+
 
 var map = []
 var buildings_map = []
@@ -747,6 +757,7 @@ func update_labels():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	money = 69
 	print(get_viewport_rect().size)
 	map_node = $map_viewport/cam/map
 	tileSize = map_node.tile_set.tile_size.x
